@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import GameModal from './components/GameModal';
+import { Question } from './types/types';
+import { Country } from './types/interfaces';
 
 function App() {
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setIsLoading] = useState(true);
   // console.log(countries);
 
   // get random country
-  const getRandomElement = (arr: []) =>
+  const getRandomElement = (arr: Country[]) =>
     arr[Math.floor(Math.random() * arr.length)];
 
-  const generateQuestion = (countries: [], type: string) => {
+  const generateQuestion = (countries: Country[], type: 'flag' | 'capital') => {
     const correctCountry = getRandomElement(countries);
     const incorrectCountries = countries
       .filter((country) => country !== correctCountry)
@@ -20,23 +22,27 @@ function App() {
     return {
       type,
       correctCountry,
-      options: shuffleArray([correctCountry, ...incorrectCountries]),
+      options: shuffleArrayCountrys([correctCountry, ...incorrectCountries]),
     };
   };
 
-  const shuffleArray = (array) => {
+  const shuffleArrayCountrys = (array: Country[]) => {
     return array.sort(() => Math.random() - 0.5);
   };
 
-  const generateQuestions = (countries) => {
-    const question = [];
+  const shuffleArrayQuestions = (array: Question[]): Question[] => {
+    return array.sort(() => Math.random() - 0.5);
+  };
+
+  const generateQuestions = (countries: Country[]) => {
+    const question: Question[] = [];
 
     for (let i = 0; i < 5; i++) {
       question.push(generateQuestion(countries, 'flag'));
       question.push(generateQuestion(countries, 'capital'));
     }
 
-    return shuffleArray(question);
+    return shuffleArrayQuestions(question);
   };
 
   // initial fetch (change to tanstack query)

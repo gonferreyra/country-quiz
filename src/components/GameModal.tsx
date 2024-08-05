@@ -1,18 +1,29 @@
 import { useEffect, useState } from 'react';
+import { Answer, Question } from '../types/types';
+import { Country } from '../types/interfaces';
 
-export default function GameModal({ countries, generateQuestions }) {
+type GameModalProps = {
+  countries: Country[];
+  generateQuestions: (countries: Country[]) => Question[];
+};
+
+export default function GameModal({
+  countries,
+  generateQuestions,
+}: GameModalProps) {
   const [questions, setQuestions] = useState(generateQuestions(countries));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     if (countries.length > 0) {
       setQuestions(generateQuestions(countries));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countries]);
 
-  const handleAnswer = (selectedOption) => {
+  const handleAnswer = (selectedOption: Country) => {
     setAnswers([
       ...answers,
       { question: questions[currentQuestionIndex], selectedOption },
@@ -81,12 +92,12 @@ export default function GameModal({ countries, generateQuestions }) {
         ) : (
           <>
             <h2 className='text-center'>
-              Which country is {correctCountry.capital[0]} the capital?
+              Which country is {correctCountry.capital?.[0]} the capital?
             </h2>
           </>
         )}
         <div className='grid grid-cols-2 grid-rows-2 gap-4'>
-          {options.map((option, index) => (
+          {options.map((option: Country, index: number) => (
             <button
               className='w-full rounded-md bg-violet py-4'
               key={index}
