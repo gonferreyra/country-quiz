@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Answer, Question } from '../types/types';
 import { Country } from '../types/interfaces';
+import NumberBtn from './NumberBtn';
 
 type GameModalProps = {
   countries: Country[];
@@ -12,8 +13,10 @@ export default function GameModal({
   generateQuestions,
 }: GameModalProps) {
   const [questions, setQuestions] = useState(generateQuestions(countries));
+  // console.log(questions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
+  // console.log(answers);
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
@@ -22,6 +25,10 @@ export default function GameModal({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countries]);
+
+  const handleCurrentQuestionIndex = (number: number) => {
+    setCurrentQuestionIndex(number);
+  };
 
   const handleAnswer = (selectedOption: Country) => {
     setAnswers([
@@ -63,39 +70,38 @@ export default function GameModal({
     );
   }
 
-  const { type, correctCountry, options } = questions[currentQuestionIndex];
+  const { correctCountry, options } = questions[currentQuestionIndex];
 
   return (
-    <main className='flex min-h-[400px] w-[70%] flex-col gap-6 rounded-md bg-light-violet p-8 text-sm font-bold text-white/80'>
+    <main className='flex min-h-[400px] w-[90%] max-w-[600px] flex-col gap-6 rounded-md bg-light-violet p-8 text-sm font-bold text-white/80'>
       <h2 className='text-center font-bold text-white/50'>Country Quiz</h2>
       <div className='mx-auto flex max-w-[350px] flex-wrap items-center justify-center gap-2'>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>1</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>2</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>3</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>4</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>5</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>6</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>7</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>8</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>9</button>
-        <button className='text-l h-10 w-10 rounded-full bg-violet'>10</button>
+        {questions.map((_, index) => (
+          <NumberBtn
+            key={index}
+            index={index}
+            onClick={handleCurrentQuestionIndex}
+            questionIndex={currentQuestionIndex}
+          >
+            {index + 1}
+          </NumberBtn>
+        ))}
       </div>
       <div className='flex flex-col gap-4'>
-        {type === 'flag' ? (
-          <div className=''>
+        <div>
+          {questions[currentQuestionIndex].type === 'flag' ? (
             <p className='text-center'>
               Which country does this flag
               <span> {correctCountry.flag} </span>
               belong to?
             </p>
-          </div>
-        ) : (
-          <>
+          ) : (
             <h2 className='text-center'>
               Which country is {correctCountry.capital?.[0]} the capital?
             </h2>
-          </>
-        )}
+          )}
+        </div>
+
         <div className='grid grid-cols-2 grid-rows-2 gap-4'>
           {options.map((option: Country, index: number) => (
             <button
