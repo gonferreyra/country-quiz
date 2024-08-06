@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import GameModal from './components/GameModal';
+import QuizGame from './components/QuizGame';
 import { Question } from './types/types';
 import { Country } from './types/interfaces';
 
@@ -66,7 +66,7 @@ function App() {
 
   return (
     <div className='flex h-screen items-center justify-center bg-bg-image bg-cover bg-no-repeat'>
-      <GameModal countries={countries} generateQuestions={generateQuestions} />
+      <QuizGame countries={countries} generateQuestions={generateQuestions} />
     </div>
   );
 }
