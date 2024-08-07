@@ -34,7 +34,10 @@ export default function QuizGame({
 
   useEffect(() => {
     // check if all questions have been answered
-    if (answers.length === questions.length && !answers.includes(undefined)) {
+    if (
+      answers.length === questions.length &&
+      !answers.some((answer) => answer === undefined)
+    ) {
       setShowResults(true);
     }
   }, [answers, questions.length]);
