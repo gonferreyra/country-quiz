@@ -124,6 +124,13 @@ export default function QuizGame({
             />
           </p>
         );
+      } else if (option === answer.question.correctCountry) {
+        return (
+          <p className='flex items-center justify-center gap-2'>
+            {option.name.common}
+            <img src={correctAnswerImg} />
+          </p>
+        );
       }
     }
     return (
@@ -134,7 +141,7 @@ export default function QuizGame({
   };
 
   return (
-    <main className='bg-lightViolet flex min-h-[400px] w-[90%] max-w-[600px] flex-col gap-6 rounded-md p-8 text-sm font-bold text-white/80'>
+    <main className='flex min-h-[400px] w-[90%] max-w-[600px] flex-col gap-6 rounded-md bg-lightViolet p-8 text-sm font-bold text-white/80'>
       <h2 className='text-center font-bold text-white/50'>Country Quiz</h2>
       <div className='mx-auto flex max-w-[350px] flex-wrap items-center justify-center gap-2'>
         {questions.map((_, index) => (
@@ -168,7 +175,7 @@ export default function QuizGame({
           {options.map((option: Country, index: number) => (
             <button
               className={clsx(
-                'from-gradient1 to-gradient2 w-full rounded-md bg-violet py-4 hover:bg-gradient-to-r',
+                'w-full rounded-md bg-violet py-4 hover:bg-gradient-to-r hover:from-gradient1 hover:to-gradient2',
                 getButtonClass(option),
               )}
               key={index}
