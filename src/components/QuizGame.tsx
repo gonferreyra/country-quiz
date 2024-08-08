@@ -1,85 +1,23 @@
-import { useEffect, useState } from 'react';
-import { Answer, Question } from '../types/types';
 import { Country } from '../types/interfaces';
 import NumberBtn from './NumberBtn';
 import clsx from 'clsx';
 
-import correctAnswerImg from '../../public/Check_round_fill.svg';
-import wrongAnswerImg from '../../public/Close_round_fill.svg';
+import correctAnswerImg from '/Check_round_fill.svg';
+import wrongAnswerImg from '/Close_round_fill.svg';
 import Results from './Results';
 
-type GameModalProps = {
-  countries: Country[];
-  generateQuestions: (countries: Country[]) => Question[];
-};
+import { useCountryQuizContext } from '../lib/hooks';
 
-export default function QuizGame({
-  countries,
-  generateQuestions,
-}: GameModalProps) {
-  const [questions, setQuestions] = useState(generateQuestions(countries));
-  // console.log(questions);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  // console.log('currentQuestionIndex: ', currentQuestionIndex);
-  const [answers, setAnswers] = useState<Answer[]>([]);
-  // console.log('answers: ', answers);
-  const [showResults, setShowResults] = useState(false);
-
-  useEffect(() => {
-    if (countries.length > 0) {
-      setQuestions(generateQuestions(countries));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countries]);
-
-  useEffect(() => {
-    // check if all questions have been answered
-    if (
-      answers.length === questions.length &&
-      !answers.some((answer) => answer === undefined)
-    ) {
-      setShowResults(true);
-    }
-  }, [answers, questions.length]);
-
-  const handleCurrentQuestionIndex = (number: number) => {
-    setCurrentQuestionIndex(number);
-  };
-
-  const handleAnswer = (selectedOption: Country) => {
-    const newAnswers = [...answers];
-    newAnswers[currentQuestionIndex] = {
-      question: questions[currentQuestionIndex],
-      selectedOption,
-    };
-    setAnswers(newAnswers);
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setTimeout(() => {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      }, 1000);
-    } else {
-      const nextUnansweredIndex = findNextUnansweredQuestionIndex(newAnswers);
-      if (nextUnansweredIndex !== -1) {
-        setTimeout(() => {
-          setCurrentQuestionIndex(nextUnansweredIndex);
-        }, 1000);
-      } else {
-        setShowResults(true);
-      }
-    }
-  };
-
-  const findNextUnansweredQuestionIndex = (answers: Answer[]) => {
-    return answers.findIndex((answer) => !answer);
-  };
-
-  const handleRestart = () => {
-    setQuestions(generateQuestions(countries));
-    setCurrentQuestionIndex(0);
-    setAnswers([]);
-    setShowResults(false);
-  };
+export default function QuizGame() {
+  const {
+    questions,
+    answers,
+    showResults,
+    currentQuestionIndex,
+    handleRestart,
+    handleCurrentQuestionIndex,
+    handleAnswer,
+  } = useCountryQuizContext();
 
   if (questions.length === 0) {
     return <div>Loading questions...</div>;
