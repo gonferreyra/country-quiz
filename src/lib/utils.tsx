@@ -20,8 +20,12 @@ export async function fetchCountries() {
 }
 
 // get random country
-export const getRandomElement = (arr: Country[]) =>
+const getRandomElement = (arr: Country[]) =>
   arr[Math.floor(Math.random() * arr.length)];
+
+const shuffleArrayCountrys = (array: Country[]) => {
+  return array.sort(() => Math.random() - 0.5);
+};
 
 export const generateQuestion = (
   countries: Country[],
@@ -40,11 +44,7 @@ export const generateQuestion = (
   };
 };
 
-export const shuffleArrayCountrys = (array: Country[]) => {
-  return array.sort(() => Math.random() - 0.5);
-};
-
-export const shuffleArrayQuestions = (array: Question[]): Question[] => {
+const shuffleArrayQuestions = (array: Question[]): Question[] => {
   return array.sort(() => Math.random() - 0.5);
 };
 
