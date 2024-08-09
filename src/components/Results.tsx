@@ -13,14 +13,14 @@ export default function Results({
   handleRestart,
 }: ResultsProps) {
   return (
-    <main className='bg-lightViolet flex min-h-[400px] w-[90%] max-w-[500px] flex-col items-center justify-center gap-6 rounded-md p-8 text-sm font-bold text-white/80'>
+    <main className='flex min-h-[400px] w-[90%] max-w-[500px] flex-col items-center justify-center gap-6 rounded-md bg-lightViolet p-8 text-sm font-bold text-white/80'>
       <img src={congratsImage} alt='congratulations image' />
       <h2 className='text-2xl'>Congrats! You completed the quiz</h2>
       <p>
         You answer {correctAnswers} of {questions.length} correctly
       </p>
       <button
-        className='from-gradient1 to-gradient2 h-12 w-32 rounded-lg bg-gradient-to-r text-sm'
+        className='h-12 w-32 rounded-lg bg-gradient-to-r from-gradient1 to-gradient2 text-sm'
         onClick={handleRestart}
       >
         Play again
