@@ -1,11 +1,16 @@
-import { createContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Country } from '../types/interfaces';
 import { useCountriesQuery } from '../lib/hooks';
 import { Answer, Question } from '../types/types';
 import { generateQuestions } from '../lib/utils';
 
 type CountryStore = {
-  countries: Country[];
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
@@ -33,45 +38,49 @@ export default function CountryQuizContextProvider({
   const [showResults, setShowResults] = useState(false);
 
   // handlers
-  const handleCurrentQuestionIndex = (number: number) => {
+  const handleCurrentQuestionIndex = useCallback((number: number) => {
     setCurrentQuestionIndex(number);
-  };
+  }, []);
 
-  const handleAnswer = (selectedOption: Country) => {
-    const newAnswers = [...answers];
-    newAnswers[currentQuestionIndex] = {
-      question: questions[currentQuestionIndex],
-      selectedOption,
-    };
-    setAnswers(newAnswers);
+  const findNextUnansweredQuestionIndex = useCallback((answers: Answer[]) => {
+    return answers.findIndex((answer) => !answer);
+  }, []);
 
-    if (currentQuestionIndex < questions.length - 1) {
-      setTimeout(() => {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      }, 1000);
-    } else {
-      const nextUnansweredIndex = findNextUnansweredQuestionIndex(newAnswers);
-      if (nextUnansweredIndex !== -1) {
+  const handleAnswer = useCallback(
+    (selectedOption: Country) => {
+      const newAnswers = [...answers];
+      newAnswers[currentQuestionIndex] = {
+        question: questions[currentQuestionIndex],
+        selectedOption,
+      };
+      setAnswers(newAnswers);
+
+      if (currentQuestionIndex < questions.length - 1) {
         setTimeout(() => {
-          setCurrentQuestionIndex(nextUnansweredIndex);
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
         }, 1000);
       } else {
-        setShowResults(true);
+        const nextUnansweredIndex = findNextUnansweredQuestionIndex(newAnswers);
+        if (nextUnansweredIndex !== -1) {
+          setTimeout(() => {
+            setCurrentQuestionIndex(nextUnansweredIndex);
+          }, 1000);
+        } else {
+          setShowResults(true);
+        }
       }
-    }
-  };
+    },
+    [answers, currentQuestionIndex, questions, findNextUnansweredQuestionIndex],
+  );
 
-  const findNextUnansweredQuestionIndex = (answers: Answer[]) => {
-    return answers.findIndex((answer) => !answer);
-  };
-
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     setQuestions(generateQuestions(countries));
     setCurrentQuestionIndex(0);
     setAnswers([]);
     setShowResults(false);
-  };
+  }, [countries]);
 
+  // effects
   useEffect(() => {
     if (countries) {
       setQuestions(generateQuestions(countries));
@@ -91,22 +100,35 @@ export default function CountryQuizContextProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers, questions.length]);
 
+  const contextValue = useMemo(
+    () => ({
+      isLoading,
+      isError,
+      error,
+      questions,
+      answers,
+      showResults,
+      currentQuestionIndex,
+      handleRestart,
+      handleCurrentQuestionIndex,
+      handleAnswer,
+    }),
+    [
+      isLoading,
+      isError,
+      error,
+      questions,
+      answers,
+      showResults,
+      currentQuestionIndex,
+      handleRestart,
+      handleCurrentQuestionIndex,
+      handleAnswer,
+    ],
+  );
+
   return (
-    <CountryQuizContext.Provider
-      value={{
-        countries,
-        isLoading,
-        isError,
-        error,
-        questions,
-        answers,
-        showResults,
-        currentQuestionIndex,
-        handleRestart,
-        handleCurrentQuestionIndex,
-        handleAnswer,
-      }}
-    >
+    <CountryQuizContext.Provider value={contextValue}>
       {children}
     </CountryQuizContext.Provider>
   );

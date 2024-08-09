@@ -35,9 +35,9 @@ export default function QuizGame() {
   }
 
   return (
-    <main className='flex min-h-[400px] w-[90%] max-w-[600px] flex-col gap-6 rounded-md bg-lightViolet p-8 text-sm font-bold text-white/80'>
+    <>
       <h2 className='text-center font-bold text-white/50'>Country Quiz</h2>
-      <div className='mx-auto flex max-w-[350px] flex-wrap items-center justify-center gap-2'>
+      <div className='mx-auto flex max-w-[480px] flex-wrap items-center justify-center gap-2'>
         {questions.map((_, index) => (
           <NumberBtn key={index} index={index}>
             {index + 1}
@@ -45,7 +45,7 @@ export default function QuizGame() {
         ))}
       </div>
       <div className='flex flex-col gap-4'>
-        <div>
+        <div className='mx-auto max-w-[400px]'>
           {questions[currentQuestionIndex].type === 'flag' ? (
             <p className='my-4 text-center text-xl'>
               Which country does this flag
@@ -59,12 +59,12 @@ export default function QuizGame() {
           )}
         </div>
 
-        <div className='grid grid-cols-2 grid-rows-2 gap-4'>
+        <div className='grid max-w-[480px] grid-cols-2 grid-rows-2 gap-4'>
           {options.map((option: Country, index: number) => (
             <OptionsBtn key={index} option={option} />
           ))}
         </div>
       </div>
-    </main>
+    </>
   );
 }
