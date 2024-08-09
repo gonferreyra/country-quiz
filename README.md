@@ -47,7 +47,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com) and [y
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/gonferreyra/github-profile-search-app.git
+$ git clone https://github.com/gonferreyra/country-quiz.git
 
 # Install dependencies
 $ npm install
