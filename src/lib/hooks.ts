@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchCountries } from './utils';
-import { useContext } from 'react';
-import { CountryQuizContext } from '../contexts/CountryQuizContextProvider';
 
 export function useCountriesQuery() {
   const { data, isLoading, isError, error } = useQuery({
@@ -15,15 +13,4 @@ export function useCountriesQuery() {
   const countries = data;
 
   return { countries, isLoading, isError, error };
-}
-
-export function useCountryQuizContext() {
-  const context = useContext(CountryQuizContext);
-  if (!context) {
-    throw new Error(
-      'useCountryQuizContext must be used within a CountryQuizContextProvider',
-    );
-  }
-
-  return context;
 }

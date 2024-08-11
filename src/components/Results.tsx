@@ -1,17 +1,21 @@
 import { Question } from '../types/types';
 import congratsImage from '../../public/congrats.svg';
+import { Country } from '../types/interfaces';
+import { useDispatch } from 'react-redux';
+import { handleRestart } from '../store/QuizGame/quizGameSlice';
 
 type ResultsProps = {
   correctAnswers: number;
   questions: Question[];
-  handleRestart: () => void;
+  countries: Country[];
 };
 
 export default function Results({
   correctAnswers,
   questions,
-  handleRestart,
+  countries,
 }: ResultsProps) {
+  const dispatch = useDispatch();
   return (
     <main className='flex min-h-[400px] w-[90%] max-w-[500px] flex-col items-center justify-center gap-6 rounded-md bg-lightViolet p-8 text-sm font-bold text-white/80'>
       <img src={congratsImage} alt='congratulations image' />
@@ -21,7 +25,7 @@ export default function Results({
       </p>
       <button
         className='h-12 w-32 rounded-lg bg-gradient-to-r from-gradient1 to-gradient2 text-sm'
-        onClick={handleRestart}
+        onClick={() => dispatch(handleRestart(countries))}
       >
         Play again
       </button>

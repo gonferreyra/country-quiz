@@ -1,18 +1,45 @@
 import { Country } from '../types/interfaces';
 import NumberBtn from './NumberBtn';
 import Results from './Results';
-
-import { useCountryQuizContext } from '../lib/hooks';
 import OptionsBtn from './OptionsBtn';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '../store/store';
+import { useEffect } from 'react';
+import { useCountriesQuery } from '../lib/hooks';
+import {
+  handleShowResults,
+  setQuestions,
+} from '../store/QuizGame/quizGameSlice';
 
 export default function QuizGame() {
-  const {
-    questions,
-    answers,
-    showResults,
-    currentQuestionIndex,
-    handleRestart,
-  } = useCountryQuizContext();
+  const { countries } = useCountriesQuery();
+  const questions = useSelector((state: RootState) => state.quizGame.questions);
+  const currentQuestionIndex = useSelector(
+    (state: RootState) => state.quizGame.currentQuestionIndex,
+  );
+  const showResults = useSelector(
+    (state: RootState) => state.quizGame.showResults,
+  );
+  const answers = useSelector((state: RootState) => state.quizGame.answers);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // check if all questions have been answered
+    if (
+      countries &&
+      answers.length === 9 &&
+      !answers.some((answer) => answer === undefined)
+    ) {
+      dispatch(handleShowResults());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answers, questions.length]);
+
+  useEffect(() => {
+    if (countries) {
+      dispatch(setQuestions(countries));
+    }
+  }, [countries, dispatch]);
 
   if (questions.length === 0) {
     return <div>Loading questions...</div>;
@@ -29,7 +56,7 @@ export default function QuizGame() {
       <Results
         correctAnswers={correctAnswers}
         questions={questions}
-        handleRestart={handleRestart}
+        countries={countries}
       />
     );
   }

@@ -1,10 +1,10 @@
 import toast, { Toaster } from 'react-hot-toast';
 import QuizGame from './components/QuizGame';
-import { useCountryQuizContext } from './lib/hooks';
+import { useCountriesQuery } from './lib/hooks';
 import { useEffect } from 'react';
 
 function App() {
-  const { isLoading, isError, error } = useCountryQuizContext();
+  const { isLoading, isError, error } = useCountriesQuery();
 
   useEffect(() => {
     if (isError && error) {
