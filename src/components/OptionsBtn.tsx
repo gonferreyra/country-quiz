@@ -62,7 +62,7 @@ export default function OptionsBtn({ option }: OptionsBtnProps) {
   return (
     <button
       className={clsx(
-        'w-full rounded-md bg-violet py-4 hover:bg-gradient-to-r hover:from-gradient1 hover:to-gradient2',
+        'w-full rounded-md bg-violet py-4 transition hover:scale-105 hover:bg-gradient-to-r hover:from-gradient1 hover:to-gradient2 focus:scale-105',
         getButtonClass(option),
       )}
       onClick={() => dispatch(handleAnswerAsync(option))}

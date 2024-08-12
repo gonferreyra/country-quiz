@@ -18,7 +18,7 @@ export default function NumberBtn({ children, index }: NumberBtnProps) {
   return (
     <button
       className={clsx('h-10 w-10 rounded-full bg-violet text-sm transition', {
-        'bg-gradient-to-r from-gradient1 to-gradient2':
+        'bg-gradient-to-r from-gradient1 to-gradient2 transition hover:scale-105 focus:scale-105':
           index === currentQuestionIndex || answers[index],
       })}
       onClick={() => dispatch(handleCurrentQuestionIndex(index))}

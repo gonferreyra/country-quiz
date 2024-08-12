@@ -10,6 +10,7 @@ import {
   handleShowResults,
   setQuestions,
 } from '../store/QuizGame/quizGameSlice';
+import { motion } from 'framer-motion';
 
 export default function QuizGame() {
   const { countries } = useCountriesQuery();
@@ -62,9 +63,9 @@ export default function QuizGame() {
   }
 
   return (
-    <>
+    <motion.div>
       <h2 className='text-center font-bold text-white/50'>Country Quiz</h2>
-      <div className='mx-auto flex max-w-[480px] flex-wrap items-center justify-center gap-2'>
+      <div className='mx-auto mt-4 flex max-w-[480px] flex-wrap items-center justify-center gap-2'>
         {questions.map((_, index) => (
           <NumberBtn key={index} index={index}>
             {index + 1}
@@ -92,6 +93,6 @@ export default function QuizGame() {
           ))}
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }
