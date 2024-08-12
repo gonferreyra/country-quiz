@@ -26,20 +26,15 @@ User Stories:
   - [Challenge](#challenge)
   - [Table of Contents](#table-of-contents)
   - [Solution](#solution)
-    - [Demo](#demo)
     - [Build With](#build-with)
   - [How To Use](#how-to-use)
 
 ## Solution
 
-### Demo
-
-The site is hosted [here](***) - Work in progress-
-
 ### Build With
 
 The technologies used for this application were React with Typescript. Tailwind was used for styling. React-Query to retrieve data from the API with caching.
-Global states are managed through ContextApi in the first version, Zustand in the second -Work in progress-, and Redux in the third. -Work in progress- (separated into different branches)
+Global states are managed through ContextApi in the first version, Redux in the second and Zustand in the third. All logic was separated in different branches, the main branch is the first version with ContextApi.
 
 ## How To Use
 
