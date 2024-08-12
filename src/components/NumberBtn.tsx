@@ -1,7 +1,5 @@
 import { clsx } from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
-import type { RootState } from '../store/store';
-import { handleCurrentQuestionIndex } from '../store/QuizGame/quizGameSlice';
+import { useQuizGameStore } from '../store/quizGameStore';
 
 type NumberBtnProps = {
   children: React.ReactNode;
@@ -9,11 +7,13 @@ type NumberBtnProps = {
 };
 
 export default function NumberBtn({ children, index }: NumberBtnProps) {
-  const currentQuestionIndex = useSelector(
-    (state: RootState) => state.quizGame.currentQuestionIndex,
+  const currentQuestionIndex = useQuizGameStore(
+    (state) => state.currentQuestionIndex,
   );
-  const answers = useSelector((state: RootState) => state.quizGame.answers);
-  const dispatch = useDispatch();
+  const answers = useQuizGameStore((state) => state.answers);
+  const handleCurrentQuestionIndex = useQuizGameStore(
+    (state) => state.handleCurrentQuestionIndex,
+  );
 
   return (
     <button
@@ -21,7 +21,7 @@ export default function NumberBtn({ children, index }: NumberBtnProps) {
         'bg-gradient-to-r from-gradient1 to-gradient2 transition hover:scale-105 focus:scale-105':
           index === currentQuestionIndex || answers[index],
       })}
-      onClick={() => dispatch(handleCurrentQuestionIndex(index))}
+      onClick={() => handleCurrentQuestionIndex(index)}
     >
       {children}
     </button>

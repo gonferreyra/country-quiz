@@ -2,20 +2,18 @@ import clsx from 'clsx';
 import correctAnswerImg from '/Check_round_fill.svg';
 import wrongAnswerImg from '/Close_round_fill.svg';
 import { Country } from '../types/interfaces';
-import { useDispatch, useSelector } from 'react-redux';
-import type { RootState, AppDispatch } from '../store/store';
-import { handleAnswerAsync } from '../store/QuizGame/quizGameSlice';
+import { useQuizGameStore } from '../store/quizGameStore';
 
 type OptionsBtnProps = {
   option: Country;
 };
 
 export default function OptionsBtn({ option }: OptionsBtnProps) {
-  const answers = useSelector((state: RootState) => state.quizGame.answers);
-  const currentQuestionIndex = useSelector(
-    (state: RootState) => state.quizGame.currentQuestionIndex,
+  const answers = useQuizGameStore((state) => state.answers);
+  const currentQuestionIndex = useQuizGameStore(
+    (state) => state.currentQuestionIndex,
   );
-  const dispatch: AppDispatch = useDispatch();
+  const handleAnswer = useQuizGameStore((state) => state.handleAnswer);
 
   const getButtonClass = (option: Country) => {
     const answer = answers[currentQuestionIndex];
@@ -65,7 +63,7 @@ export default function OptionsBtn({ option }: OptionsBtnProps) {
         'w-full rounded-md bg-violet py-4 transition hover:scale-105 hover:bg-gradient-to-r hover:from-gradient1 hover:to-gradient2 focus:scale-105',
         getButtonClass(option),
       )}
-      onClick={() => dispatch(handleAnswerAsync(option))}
+      onClick={() => handleAnswer(option)}
       disabled={!!answers[currentQuestionIndex]}
     >
       {getButtonContent(option)}
